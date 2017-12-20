@@ -1,0 +1,4 @@
+.idea
+*/bundled/*
+!*/bundled/.gitkeep
+node_modules
