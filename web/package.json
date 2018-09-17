@@ -9,12 +9,12 @@
   "devDependencies": {
     "watchify": "latest",
     "babelify": "latest",
-    "babel-core": "latest",
-    "babel-preset-es2015": "latest",
-    "babel-preset-react": "latest",
+    "@babel/core": "latest",
+    "@babel/preset-env": "latest",
+    "@babel/preset-react": "latest",
     "jasmine": "latest"
   },
   "scripts": {
-    "compile-test": "watchify spec/webSpec.js -o bundled/compiledWebSpec.js -t [ babelify --presets [ es2015 react ] ]"
+    "compile-test": "watchify spec/webSpec.js -o bundled/compiledWebSpec.js -t [ babelify --presets [ @babel/env @babel/react ] ]"
   }
 }
