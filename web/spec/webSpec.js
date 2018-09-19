@@ -35,6 +35,16 @@ describe("play form", function () {
             submitForm()
             expect(page()).toContain("INVALID")
         })
+    })
+    
+    describe("when the game module determines the throws are tie", function () {
+        beforeEach(function () {
+            let requests = {
+                play(p1Throw, p2Throw, ui){ ui.tie() }
+            }
+
+            render(requests)
+        })
 
         it("displays 'TIE'", function () {
             expect(page()).not.toContain("TIE")
