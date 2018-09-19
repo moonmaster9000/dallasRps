@@ -93,8 +93,6 @@ describe("play", function () {
             play("sailboat", "sailboat", ui)
 
             expect(ui.invalid).toHaveBeenCalled()
-        });
+        })
     })
-
-
 })
