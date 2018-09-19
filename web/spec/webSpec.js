@@ -21,23 +21,57 @@ class PlayForm extends React.Component {
 }
 
 describe("play form", function () {
-    describe("when the game module determines the throws are invalid", function () {
-        it("displays 'INVALID'", function () {
-            let domFixture = document.createElement("div")
-            domFixture.id = "hello"
-            document.body.appendChild(domFixture)
+    let domFixture
 
+    function setupDOM() {
+        domFixture = document.createElement("div")
+        domFixture.id = "hello"
+        document.body.appendChild(domFixture)
+    }
+
+    beforeEach(function () {
+        setupDOM()
+    })
+
+    function cleanUpDOM() {
+        domFixture.remove()
+    }
+
+    afterEach(function () {
+        cleanUpDOM()
+    })
+
+    function page() {
+        return domFixture.innerText;
+    }
+
+    function submitForm() {
+        domFixture.querySelector("button").click()
+    }
+
+    function render(requests) {
+        ReactDOM.render(<PlayForm requests={requests}/>, domFixture)
+    }
+
+    describe("when the game module determines the throws are invalid", function () {
+        beforeEach(function () {
             let requests = {
                 play(p1Throw, p2Throw, ui){ ui.invalid() }
             }
 
-            ReactDOM.render(<PlayForm requests={requests}/>, domFixture)
+            render(requests)
+        })
 
-            expect(domFixture.innerText).not.toContain("INVALID")
-            domFixture.querySelector("button").click()
-            expect(domFixture.innerText).toContain("INVALID")
+        it("displays 'INVALID'", function () {
+            expect(page()).not.toContain("INVALID")
+            submitForm()
+            expect(page()).toContain("INVALID")
+        })
 
-            domFixture.remove()
+        it("displays 'TIE'", function () {
+            expect(page()).not.toContain("TIE")
+            submitForm()
+            expect(page()).toContain("TIE")
         })
     })
 })
