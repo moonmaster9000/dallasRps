@@ -1,14 +1,14 @@
 function Requests() {
-    this.play = function (p1, p2, ui) {
-        new PlayRequest(p1, p2, ui).process()
+    this.playRound = function (p1Throw, p2Throw, ui) {
+        new PlayRoundRequest(p1Throw, p2Throw, ui).process()
     }
 }
 
-function PlayRequest(p1, p2, ui){
+function PlayRoundRequest(p1Throw, p2Throw, ui){
     this.process = function(){
-        if (invalidThrow(p1) || invalidThrow(p2))
+        if (invalidThrow(p1Throw) || invalidThrow(p2Throw))
             ui.invalid()
-        else if (draw())
+        else if (tie())
             ui.tie()
         else if (p1Wins())
             ui.p1Wins()
@@ -16,26 +16,26 @@ function PlayRequest(p1, p2, ui){
             ui.p2Wins()
     }
 
-    function invalidThrow(shape) {
-        let validShapes = ["rock", "paper", "scissors"]
-        return !validShapes.includes(shape);
+    function invalidThrow(aThrow) {
+        let validThrows = ["rock", "paper", "scissors"]
+        return !validThrows.includes(aThrow);
     }
 
-    function draw() {
-        return p1 === p2
+    function tie() {
+        return p1Throw === p2Throw
     }
 
     function p1Wins() {
         return (
-            p1 === "rock"     && p2 === "scissors"  ||
-            p1 === "scissors" && p2 === "paper"     ||
-            p1 === "paper"    && p2 === "rock"
+            p1Throw === "rock"     && p2Throw === "scissors"  ||
+            p1Throw === "scissors" && p2Throw === "paper"     ||
+            p1Throw === "paper"    && p2Throw === "rock"
         )
     }
 }
 
 
-describe("play", function () {
+describe("playRound", function () {
     let ui
 
     describe("p1 win scenarios", function () {
@@ -44,19 +44,19 @@ describe("play", function () {
         })
 
         it('rock v. scissors', function () {
-            play("rock", "scissors", ui)
+            playRound("rock", "scissors", ui)
 
             expect(ui.p1Wins).toHaveBeenCalled()
         })
 
         it('scissors v. paper', function () {
-            play("scissors", "paper", ui)
+            playRound("scissors", "paper", ui)
 
             expect(ui.p1Wins).toHaveBeenCalled()
         })
 
         it('paper v. rock', function () {
-            play("paper", "rock", ui)
+            playRound("paper", "rock", ui)
 
             expect(ui.p1Wins).toHaveBeenCalled()
         })
@@ -68,31 +68,31 @@ describe("play", function () {
         })
 
         it('scissors v. rock', function () {
-            play("scissors", "rock", ui)
+            playRound("scissors", "rock", ui)
 
             expect(ui.p2Wins).toHaveBeenCalled()
         })
 
         it('paper v. scissors', function () {
-            play("paper", "scissors", ui)
+            playRound("paper", "scissors", ui)
 
             expect(ui.p2Wins).toHaveBeenCalled()
         })
 
         it('rock v. paper', function () {
-            play("rock", "paper", ui)
+            playRound("rock", "paper", ui)
 
             expect(ui.p2Wins).toHaveBeenCalled()
         })
     })
 
-    describe("tie scnenarios", function () {
+    describe("tie scenarios", function () {
         beforeEach(function () {
             ui = jasmine.createSpyObj("ui", ["tie"])
         })
 
         it("rock v. rock", function () {
-            play("rock", "rock", ui)
+            playRound("rock", "rock", ui)
 
             expect(ui.tie).toHaveBeenCalled()
         })
@@ -104,25 +104,25 @@ describe("play", function () {
         })
 
         it("invalid v. rock", function () {
-            play(Math.random(), "rock", ui)
+            playRound(Math.random(), "rock", ui)
 
             expect(ui.invalid).toHaveBeenCalled()
         })
 
         it("rock v. invalid", function () {
-            play("rock", Math.random(), ui)
+            playRound("rock", Math.random(), ui)
 
             expect(ui.invalid).toHaveBeenCalled()
         })
 
         it('invalid v. same invalid', function () {
-            play("sailboat", "sailboat", ui)
+            playRound("sailboat", "sailboat", ui)
 
             expect(ui.invalid).toHaveBeenCalled()
         })
     })
 
-    function play(p1, p2, ui){
-        new Requests().play(p1, p2, ui)
+    function playRound(p1, p2, ui){
+        new Requests().playRound(p1, p2, ui)
     }
 })
