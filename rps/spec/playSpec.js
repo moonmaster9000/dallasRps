@@ -1,13 +1,33 @@
-function play(p1, p2, ui){
-    if (!["rock", "paper", "scissors"].includes(p1) || !["rock", "paper", "scissors"].includes(p2))
-        ui.invalid()
-    else if (p1 === p2)
-        ui.tie()
-    else if (p1 === "rock" && p2 === "scissors" || p1 === "scissors" && p2 === "paper" || p1 === "paper" && p2 === "rock")
-        ui.p1Wins()
-    else
-        ui.p2Wins()
+function Requests(){
+    this.play = function(p1, p2, ui){
+        if (invalidThrow(p1) || invalidThrow(p2))
+            ui.invalid()
+        else if (draw(p1, p2))
+            ui.tie()
+        else if (p1Wins(p1, p2))
+            ui.p1Wins()
+        else
+            ui.p2Wins()
+    }
+
+    function invalidThrow(shape) {
+        let validShapes = ["rock", "paper", "scissors"]
+        return !validShapes.includes(shape);
+    }
+
+    function draw(t1, t2) {
+        return t1 === t2
+    }
+
+    function p1Wins(p1, p2) {
+        return (
+            p1 === "rock"     && p2 === "scissors"  ||
+            p1 === "scissors" && p2 === "paper"     ||
+            p1 === "paper"    && p2 === "rock"
+        )
+    }
 }
+
 
 describe("play", function () {
     let ui
@@ -95,4 +115,8 @@ describe("play", function () {
             expect(ui.invalid).toHaveBeenCalled()
         })
     })
+
+    function play(p1, p2, ui){
+        new Requests().play(p1, p2, ui)
+    }
 })
