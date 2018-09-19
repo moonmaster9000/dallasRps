@@ -9,7 +9,15 @@ class PlayForm extends React.Component {
     }
 
     handleSubmit(){
+        this.props.requests.play("p1 throw placeholder", "p2 throw placeholder", this)
+    }
+
+    invalid(){
         this.setState({message: "INVALID"})
+    }
+
+    tie(){
+        this.setState({message: "TIE"})
     }
 
     render(){
