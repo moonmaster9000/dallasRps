@@ -20,6 +20,14 @@ class PlayForm extends React.Component {
         this.setState({message: "TIE"})
     }
 
+    p1Wins(){
+        this.setState({message: "P1 Wins!"})
+    }
+
+    p2Wins(){
+        this.setState({message: "P2 Wins!"})
+    }
+
     render(){
         return <div>
             {this.state.message}
@@ -58,6 +66,38 @@ describe("play form", function () {
             expect(page()).not.toContain("TIE")
             submitForm()
             expect(page()).toContain("TIE")
+        })
+    })
+    
+    describe("when the game module determines the throws are p1Wins", function () {
+        beforeEach(function () {
+            let requests = {
+                play(p1Throw, p2Throw, ui){ ui.p1Wins() }
+            }
+
+            render(requests)
+        })
+
+        it("displays 'P1 Wins!'", function () {
+            expect(page()).not.toContain("P1 Wins!")
+            submitForm()
+            expect(page()).toContain("P1 Wins!")
+        })
+    })
+
+    describe("when the game module determines the throws are p2Wins", function () {
+        beforeEach(function () {
+            let requests = {
+                play(p1Throw, p2Throw, ui){ ui.p2Wins() }
+            }
+
+            render(requests)
+        })
+
+        it("displays 'P2 Wins!'", function () {
+            expect(page()).not.toContain("P2 Wins!")
+            submitForm()
+            expect(page()).toContain("P2 Wins!")
         })
     })
 
