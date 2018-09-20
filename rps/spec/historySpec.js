@@ -36,24 +36,49 @@ describe("history", function () {
 })
 
 function FakeRoundRepo(){
+    let rounds = []
 
+    this.isEmpty = function(){
+        return rounds.length === 0
+    }
+
+    this.save = function(r){
+        rounds.push(r)
+    }
+
+    this.getAll = function(){
+        return rounds
+    }
 }
 
 fdescribe("round repo contract", function () {
+    let repo
+
+    beforeEach(function () {
+        repo = new FakeRoundRepo()
+    })
+
     describe("when no rounds have been saved", function () {
         it("is empty", function () {
-            expect(new FakeRoundRepo().isEmpty()).toEqual(true)
+            expect(repo.isEmpty()).toEqual(true)
         })
     })
 
     describe("when rounds have been saved", function () {
-        it('is not empty', function () {
+        let round
 
-        });
+        beforeEach(function () {
+            round = new Round("foo", "bar", "baz");
+            repo.save(round)
+        })
+
+        it('is not empty', function () {
+            expect(repo.isEmpty()).toEqual(false)
+        })
 
         it('returns rounds that have been saved', function () {
-
-        });
+            expect(repo.getAll()).toEqual([round])
+        })
     })
 })
 
