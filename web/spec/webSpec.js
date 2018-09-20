@@ -102,6 +102,25 @@ describe("play form", function () {
         })
     })
 
+    it("sends the user input to the game module", function () {
+        let playRoundSpy = jasmine.createSpy()
+
+        render({playRound: playRoundSpy})
+
+        //input "rock"
+        let input = document.querySelector("[name='p1Throw']")
+        input.value = "rock"
+        ReactTestUtils.Simulate.change(input)
+        //input "scissors"
+
+        //submit the form
+        submitForm()
+
+        //verify game module received input
+        expect(playRoundSpy).toHaveBeenCalledWith("rock", "scissors", jasmine.any(Object))
+    })
+
+
     let domFixture
 
     function setupDOM() {
