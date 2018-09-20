@@ -9,7 +9,7 @@ class PlayForm extends React.Component {
     }
 
     handleSubmit(){
-        this.props.requests.play("p1 throw placeholder", "p2 throw placeholder", this)
+        this.props.requests.playRound("p1 throw placeholder", "p2 throw placeholder", this)
     }
 
     invalid(){
@@ -40,7 +40,7 @@ describe("play form", function () {
     describe("when the game module determines the throws are invalid", function () {
         beforeEach(function () {
             let requests = {
-                play(p1Throw, p2Throw, ui){ ui.invalid() }
+                playRound(p1Throw, p2Throw, ui){ ui.invalid() }
             }
 
             render(requests)
@@ -56,7 +56,7 @@ describe("play form", function () {
     describe("when the game module determines the throws are tie", function () {
         beforeEach(function () {
             let requests = {
-                play(p1Throw, p2Throw, ui){ ui.tie() }
+                playRound(p1Throw, p2Throw, ui){ ui.tie() }
             }
 
             render(requests)
@@ -72,7 +72,7 @@ describe("play form", function () {
     describe("when the game module determines the throws are p1Wins", function () {
         beforeEach(function () {
             let requests = {
-                play(p1Throw, p2Throw, ui){ ui.p1Wins() }
+                playRound(p1Throw, p2Throw, ui){ ui.p1Wins() }
             }
 
             render(requests)
@@ -88,7 +88,7 @@ describe("play form", function () {
     describe("when the game module determines the throws are p2Wins", function () {
         beforeEach(function () {
             let requests = {
-                play(p1Throw, p2Throw, ui){ ui.p2Wins() }
+                playRound(p1Throw, p2Throw, ui){ ui.p2Wins() }
             }
 
             render(requests)
