@@ -15,6 +15,7 @@
     "jasmine": "latest"
   },
   "scripts": {
-    "compile-test": "watchify spec/*.js -o bundled/compiledWebSpec.js -t [ babelify --presets [ @babel/env @babel/react ] ]"
+    "compile-test": "watchify spec/*.js -o bundled/compiledWebSpec.js -t [ babelify --presets [ @babel/env @babel/react ] ]",
+    "compile-main": "watchify app.js -o bundled/compiledApp.js -t [ babelify --presets [ @babel/env @babel/react ] ]"
   }
 }
