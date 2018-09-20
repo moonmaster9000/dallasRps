@@ -1,7 +1,8 @@
 const {Requests}= require("../src/rps")
+const FakeRoundRepo = require("./FakeRoundRepo")
 
 describe("playRound", function () {
-    let ui
+    let ui, roundRepo
 
     describe("p1 win scenarios", function () {
         beforeEach(function () {
@@ -87,7 +88,11 @@ describe("playRound", function () {
         })
     })
 
+    beforeEach(function () {
+        roundRepo = new FakeRoundRepo()
+    })
+
     function playRound(p1, p2, ui){
-        new Requests().playRound(p1, p2, ui)
+        new Requests(roundRepo).playRound(p1, p2, ui)
     }
 })

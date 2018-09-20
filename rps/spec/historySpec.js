@@ -1,93 +1,65 @@
 const {Requests, Round}  = require("../src/rps")
+const FakeRoundRepo = require("./FakeRoundRepo")
 
 describe("history", function () {
+    let requests, roundRepo
+
+    beforeEach(function () {
+        roundRepo = new FakeRoundRepo()
+        requests    = new Requests(roundRepo)
+    })
+
     describe("when no rounds have been played", function () {
         it('tell the UI that no rounds have been played', function () {
             let ui = jasmine.createSpyObj("ui", ["noRounds"])
-
-            new Requests().getHistory(ui)
-
+            requests.getHistory(ui)
             expect(ui.noRounds).toHaveBeenCalled()
-        });
+        })
     })
 
-    fdescribe("when rounds have been played", function () {
-        it('getHistory sends the rounds to the UI', function () {
-            let requests = new Requests()
-            let playRoundUI = {invalid(){}, tie(){}, p1Wins(){}, p2Wins(){}}
-            let roundRepo = new FakeRoundRepo()
+    describe("when rounds have been played", function () {
+        let playRoundUI, getHistoryUI
 
-            let getHistoryUI = jasmine.createSpyObj("getHistoryUI", ["rounds"])
+        beforeEach(function () {
+            playRoundUI = {invalid(){}, tie(){}, p1Wins(){}, p2Wins(){}}
+            getHistoryUI = jasmine.createSpyObj("getHistoryUI", ["rounds"])
+        })
 
-            requests.playRound("rock", "sailboat", playRoundUI, roundRepo)
-            requests.playRound("rock", "rock", playRoundUI, roundRepo)
-            requests.playRound("rock", "scissors", playRoundUI, roundRepo)
-            requests.playRound("scissors", "rock", playRoundUI, roundRepo)
+        describe("when invalid rounds have been played", function () {
+            it('getHistory sends the rounds to the UI', function () {
+                requests.playRound("rock", "sailboat", playRoundUI)
+                requests.getHistory(getHistoryUI)
+                expect(getHistoryUI.rounds).toHaveBeenCalledWith([new Round("rock", "sailboat", "invalid")])
+            })
+        })
 
-            requests.getHistory(getHistoryUI, roundRepo)
+        describe("when tie rounds have been played", function () {
+            it('getHistory sends the ties to the UI', function () {
+                requests.playRound("rock", "rock", playRoundUI)
+                requests.getHistory(getHistoryUI)
+                expect(getHistoryUI.rounds).toHaveBeenCalledWith([new Round("rock", "rock", "tie")])
+            })
+        })
 
-            expect(getHistoryUI.rounds).toHaveBeenCalledWith(
-                [
-                    new Round("rock", "sailboat", "invalid"),
-                    new Round("rock", "rock", "tie"),
-                    new Round("rock", "scissors", "p1Wins"),
-                    new Round("scissors", "rock", "p2Wins"),
-                ]
-            )
-        });
+        describe("when p1Wins rounds have been played", function () {
+            it('getHistory sends the p1Wins to the UI', function () {
+                requests.playRound("rock", "scissors", playRoundUI)
+                requests.getHistory(getHistoryUI)
+                expect(getHistoryUI.rounds).toHaveBeenCalledWith([new Round("rock", "scissors", "p1Wins")])
+            })
+        })
+
+        describe("when p2Wins rounds have been played", function () {
+            it('getHistory sends the p2Wins to the UI', function () {
+                requests.playRound("scissors", "rock", playRoundUI)
+                requests.getHistory(getHistoryUI)
+                expect(getHistoryUI.rounds).toHaveBeenCalledWith([new Round("scissors", "rock", "p2Wins")])
+            })
+        })
     })
 })
 
-function FakeRoundRepo(){
-    let rounds = []
 
-    this.isEmpty = function(){
-        return rounds.length === 0
-    }
-
-    this.save = function(r){
-        rounds.push(r)
-    }
-
-    this.getAll = function(){
-        return rounds
-    }
-}
-
-function roundRepoContract(roundRepoClass){
-    describe("round repo contract", function () {
-        let repo
-
-        beforeEach(function () {
-            repo = new roundRepoClass()
-        })
-
-        describe("when no rounds have been saved", function () {
-            it("is empty", function () {
-                expect(repo.isEmpty()).toEqual(true)
-            })
-        })
-
-        describe("when rounds have been saved", function () {
-            let round
-
-            beforeEach(function () {
-                round = new Round("foo", "bar", "baz");
-                repo.save(round)
-            })
-
-            it('is not empty', function () {
-                expect(repo.isEmpty()).toEqual(false)
-            })
-
-            it('returns rounds that have been saved', function () {
-                expect(repo.getAll()).toEqual([round])
-            })
-        })
-    })
-}
-
-roundRepoContract(FakeRoundRepo)
 
 
 

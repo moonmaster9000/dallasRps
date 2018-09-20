@@ -1,9 +1,9 @@
-function Requests() {
-    this.playRound = function (p1Throw, p2Throw, ui, roundRepo) {
+function Requests(roundRepo) {
+    this.playRound = function (p1Throw, p2Throw, ui) {
         new PlayRoundRequest(p1Throw, p2Throw, ui, roundRepo).process()
     }
 
-    this.getHistory = function(ui, roundRepo){
+    this.getHistory = function(ui){
         if (roundRepo.isEmpty())
             ui.noRounds()
         else
