@@ -1,5 +1,6 @@
 const React = require("react")
 const ReactDOM = require("react-dom")
+const ReactTestUtils = require("react-dom/test-utils")
 
 class PlayForm extends React.Component {
     constructor(){
