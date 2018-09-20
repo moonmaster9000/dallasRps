@@ -14,17 +14,24 @@ describe("history", function () {
     fdescribe("when rounds have been played", function () {
         it('getHistory sends the rounds to the UI', function () {
             let requests = new Requests()
-            let playRoundUI = {invalid(){}}
+            let playRoundUI = {invalid(){}, tie(){}, p1Wins(){}, p2Wins(){}}
             let roundRepo = new FakeRoundRepo()
 
             let getHistoryUI = jasmine.createSpyObj("getHistoryUI", ["rounds"])
 
             requests.playRound("rock", "sailboat", playRoundUI, roundRepo)
+            requests.playRound("rock", "rock", playRoundUI, roundRepo)
+            requests.playRound("rock", "scissors", playRoundUI, roundRepo)
+            requests.playRound("scissors", "rock", playRoundUI, roundRepo)
+
             requests.getHistory(getHistoryUI, roundRepo)
 
             expect(getHistoryUI.rounds).toHaveBeenCalledWith(
                 [
-                    new Round("rock", "sailboat", "invalid")
+                    new Round("rock", "sailboat", "invalid"),
+                    new Round("rock", "rock", "tie"),
+                    new Round("rock", "scissors", "p1Wins"),
+                    new Round("scissors", "rock", "p2Wins"),
                 ]
             )
         });

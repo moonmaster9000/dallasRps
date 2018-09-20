@@ -13,16 +13,19 @@ function Requests() {
 
 function PlayRoundRequest(p1Throw, p2Throw, ui, roundRepo){
     this.process = function(){
-        if (invalidThrow(p1Throw) || invalidThrow(p2Throw)){
-            ui.invalid()
-            roundRepo.save(new Round(p1Throw, p2Throw, "invalid"))
-        }
+        if (invalidThrow(p1Throw) || invalidThrow(p2Throw))
+            handleResult("invalid")
         else if (tie())
-            ui.tie()
+            handleResult("tie")
         else if (p1Wins())
-            ui.p1Wins()
+            handleResult("p1Wins")
         else
-            ui.p2Wins()
+            handleResult("p2Wins")
+    }
+
+    function handleResult(result) {
+        ui[result]()
+        roundRepo.save(new Round(p1Throw, p2Throw, result))
     }
 
     function invalidThrow(aThrow) {
