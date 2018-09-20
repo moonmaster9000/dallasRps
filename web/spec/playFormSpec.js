@@ -81,43 +81,18 @@ describe("play form", function () {
         expect(playRoundSpy).toHaveBeenCalledWith("rock", "scissors", jasmine.any(Object))
     })
 
-    let domFixture
-
-
-    function setupDOM() {
-        domFixture = document.createElement("div")
-        domFixture.id = "hello"
-        document.body.appendChild(domFixture)
-    }
-
-    beforeEach(function () {
-        setupDOM()
-    })
-
-    function cleanUpDOM() {
-        domFixture.remove()
-    }
-
     function fillIn(inputName, inputValue) {
         let input = document.querySelector(`[name='${inputName}']`)
         input.value = inputValue
         ReactTestUtils.Simulate.change(input)
     }
 
-    afterEach(function () {
-        cleanUpDOM()
-    })
-
-    function page() {
-        return domFixture.innerText;
-    }
-
     function submitForm() {
-        domFixture.querySelector("button").click()
+        document.querySelector("button").click()
     }
 
     function render(requests) {
-        ReactDOM.render(<PlayForm requests={requests}/>, domFixture)
+        renderComponent(<PlayForm requests={requests}/>)
     }
 })
 

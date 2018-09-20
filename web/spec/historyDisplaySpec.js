@@ -34,33 +34,8 @@ describe("Displaying History", function () {
         })
     })
 
-    let domFixture
-
-
-    function setupDOM() {
-        domFixture = document.createElement("div")
-        domFixture.id = "hello"
-        document.body.appendChild(domFixture)
-    }
-
-    beforeEach(function () {
-        setupDOM()
-    })
-
-    function cleanUpDOM() {
-        domFixture.remove()
-    }
-
-    afterEach(function () {
-        cleanUpDOM()
-    })
-
-    function page() {
-        return domFixture.innerText;
-    }
-
     function renderHistory(requests) {
-        ReactDOM.render(<HistoryDisplay requests={requests}/>, domFixture)
+        renderComponent(<HistoryDisplay requests={requests}/>)
     }
 })
 
