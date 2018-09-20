@@ -2,6 +2,13 @@ function Requests() {
     this.playRound = function (p1Throw, p2Throw, ui) {
         new PlayRoundRequest(p1Throw, p2Throw, ui).process()
     }
+
+    this.getHistory = function(ui, roundRepo){
+        if (roundRepo.isEmpty())
+            ui.noRounds()
+        else
+            ui.rounds(roundRepo.getAll())
+    }
 }
 
 function PlayRoundRequest(p1Throw, p2Throw, ui){
@@ -34,6 +41,13 @@ function PlayRoundRequest(p1Throw, p2Throw, ui){
     }
 }
 
+function Round(p1Throw, p2Throw, result){
+    this.p1Throw = p1Throw
+    this.p2Throw = p2Throw
+    this.result = result
+}
+
 module.exports = {
-    Requests
+    Requests,
+    Round,
 }

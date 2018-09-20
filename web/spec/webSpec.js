@@ -108,12 +108,6 @@ describe("play form", function () {
         })
     })
 
-    function fillIn(inputName, inputValue) {
-        let input = document.querySelector(`[name='${inputName}']`)
-        input.value = inputValue
-        ReactTestUtils.Simulate.change(input)
-    }
-
     it("sends the user input to the game module", function () {
         let playRoundSpy = jasmine.createSpy()
 
@@ -127,8 +121,8 @@ describe("play form", function () {
         expect(playRoundSpy).toHaveBeenCalledWith("rock", "scissors", jasmine.any(Object))
     })
 
-
     let domFixture
+
 
     function setupDOM() {
         domFixture = document.createElement("div")
@@ -142,6 +136,12 @@ describe("play form", function () {
 
     function cleanUpDOM() {
         domFixture.remove()
+    }
+
+    function fillIn(inputName, inputValue) {
+        let input = document.querySelector(`[name='${inputName}']`)
+        input.value = inputValue
+        ReactTestUtils.Simulate.change(input)
     }
 
     afterEach(function () {
