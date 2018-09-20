@@ -10,7 +10,7 @@ class PlayForm extends React.Component {
     }
 
     handleSubmit(){
-        this.props.requests.playRound("p1 throw placeholder", "p2 throw placeholder", this)
+        this.props.requests.playRound(this.state.p1Throw, this.state.p2Throw, this)
     }
 
     invalid(){
@@ -29,9 +29,15 @@ class PlayForm extends React.Component {
         this.setState({message: "P2 Wins!"})
     }
 
+    throwHandler(e){
+        this.setState({[e.target.name]: e.target.value})
+    }
+
     render(){
         return <div>
             {this.state.message}
+            <input name="p1Throw" onChange={this.throwHandler.bind(this)}/>
+            <input name="p2Throw" onChange={this.throwHandler.bind(this)}/>
             <button onClick={this.handleSubmit.bind(this)}>PLAY</button>
         </div>
     }
@@ -102,21 +108,22 @@ describe("play form", function () {
         })
     })
 
+    function fillIn(inputName, inputValue) {
+        let input = document.querySelector(`[name='${inputName}']`)
+        input.value = inputValue
+        ReactTestUtils.Simulate.change(input)
+    }
+
     it("sends the user input to the game module", function () {
         let playRoundSpy = jasmine.createSpy()
 
         render({playRound: playRoundSpy})
 
-        //input "rock"
-        let input = document.querySelector("[name='p1Throw']")
-        input.value = "rock"
-        ReactTestUtils.Simulate.change(input)
-        //input "scissors"
+        fillIn("p1Throw", "rock");
+        fillIn("p2Throw", "scissors");
 
-        //submit the form
         submitForm()
 
-        //verify game module received input
         expect(playRoundSpy).toHaveBeenCalledWith("rock", "scissors", jasmine.any(Object))
     })
 
