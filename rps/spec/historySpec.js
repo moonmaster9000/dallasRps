@@ -11,15 +11,11 @@ describe("history", function () {
         });
     })
 
-    describe("when rounds have been played", function () {
+    fdescribe("when rounds have been played", function () {
         it('getHistory sends the rounds to the UI', function () {
             let requests = new Requests()
             let playRoundUI = {invalid(){}}
-            let roundRepo = {
-                isEmpty(){},
-                getAll(){},
-                save(){}
-            }
+            let roundRepo = new FakeRoundRepo()
 
             let getHistoryUI = jasmine.createSpyObj("getHistoryUI", ["rounds"])
 
@@ -51,39 +47,40 @@ function FakeRoundRepo(){
     }
 }
 
-fdescribe("round repo contract", function () {
-    let repo
-
-    beforeEach(function () {
-        repo = new FakeRoundRepo()
-    })
-
-    describe("when no rounds have been saved", function () {
-        it("is empty", function () {
-            expect(repo.isEmpty()).toEqual(true)
-        })
-    })
-
-    describe("when rounds have been saved", function () {
-        let round
+function roundRepoContract(roundRepoClass){
+    describe("round repo contract", function () {
+        let repo
 
         beforeEach(function () {
-            round = new Round("foo", "bar", "baz");
-            repo.save(round)
+            repo = new roundRepoClass()
         })
 
-        it('is not empty', function () {
-            expect(repo.isEmpty()).toEqual(false)
+        describe("when no rounds have been saved", function () {
+            it("is empty", function () {
+                expect(repo.isEmpty()).toEqual(true)
+            })
         })
 
-        it('returns rounds that have been saved', function () {
-            expect(repo.getAll()).toEqual([round])
+        describe("when rounds have been saved", function () {
+            let round
+
+            beforeEach(function () {
+                round = new Round("foo", "bar", "baz");
+                repo.save(round)
+            })
+
+            it('is not empty', function () {
+                expect(repo.isEmpty()).toEqual(false)
+            })
+
+            it('returns rounds that have been saved', function () {
+                expect(repo.getAll()).toEqual([round])
+            })
         })
     })
-})
+}
 
-
-
+roundRepoContract(FakeRoundRepo)
 
 
 
