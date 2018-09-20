@@ -12,12 +12,13 @@ describe("history", function () {
     })
 
     describe("when rounds have been played", function () {
-        fit('getHistory sends the rounds to the UI', function () {
+        it('getHistory sends the rounds to the UI', function () {
             let requests = new Requests()
             let playRoundUI = {invalid(){}}
             let roundRepo = {
                 isEmpty(){},
-                getAll(){}
+                getAll(){},
+                save(){}
             }
 
             let getHistoryUI = jasmine.createSpyObj("getHistoryUI", ["rounds"])
@@ -30,6 +31,28 @@ describe("history", function () {
                     new Round("rock", "sailboat", "invalid")
                 ]
             )
+        });
+    })
+})
+
+function FakeRoundRepo(){
+
+}
+
+fdescribe("round repo contract", function () {
+    describe("when no rounds have been saved", function () {
+        it("is empty", function () {
+            expect(new FakeRoundRepo().isEmpty()).toEqual(true)
+        })
+    })
+
+    describe("when rounds have been saved", function () {
+        it('is not empty', function () {
+
+        });
+
+        it('returns rounds that have been saved', function () {
+
         });
     })
 })
