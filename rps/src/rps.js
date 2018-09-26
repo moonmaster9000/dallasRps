@@ -1,6 +1,29 @@
 function Requests(roundRepo) {
     this.playRound = function (p1Throw, p2Throw, ui) {
-        new PlayRoundRequest(p1Throw, p2Throw, ui, roundRepo).process()
+        new PlayRoundRequest(p1Throw, p2Throw, new PersistenceDecorator()).process()
+
+        function PersistenceDecorator(){
+            this.invalid = function(){
+                saveAndDelegate("invalid")
+            }
+
+            this.tie = function(){
+                saveAndDelegate("tie")
+            }
+
+            this.p1Wins = function(){
+                saveAndDelegate("p1Wins")
+            }
+
+            this.p2Wins = function(){
+                saveAndDelegate("p2Wins")
+            }
+
+            function saveAndDelegate(result){
+                roundRepo.save(new Round(p1Throw, p2Throw, result))
+                ui[result]()
+            }
+        }
     }
 
     this.getHistory = function(ui){
@@ -9,23 +32,21 @@ function Requests(roundRepo) {
         else
             ui.rounds(roundRepo.getAll())
     }
+
+
 }
 
-function PlayRoundRequest(p1Throw, p2Throw, ui, roundRepo){
+
+function PlayRoundRequest(p1Throw, p2Throw, ui){
     this.process = function(){
         if (invalidThrow(p1Throw) || invalidThrow(p2Throw))
-            handleResult("invalid")
+            ui.invalid()
         else if (tie())
-            handleResult("tie")
+            ui.tie()
         else if (p1Wins())
-            handleResult("p1Wins")
+            ui.p1Wins()
         else
-            handleResult("p2Wins")
-    }
-
-    function handleResult(result) {
-        ui[result]()
-        roundRepo.save(new Round(p1Throw, p2Throw, result))
+            ui.p2Wins()
     }
 
     function invalidThrow(aThrow) {
