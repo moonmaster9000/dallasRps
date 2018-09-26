@@ -1,29 +1,11 @@
 function Requests(roundRepo) {
     this.playRound = function (p1Throw, p2Throw, ui) {
-        new PlayRoundRequest(p1Throw, p2Throw, new PersistenceDecorator()).process()
-
-        function PersistenceDecorator(){
-            this.invalid = function(){
-                saveAndDelegate("invalid")
-            }
-
-            this.tie = function(){
-                saveAndDelegate("tie")
-            }
-
-            this.p1Wins = function(){
-                saveAndDelegate("p1Wins")
-            }
-
-            this.p2Wins = function(){
-                saveAndDelegate("p2Wins")
-            }
-
-            function saveAndDelegate(result){
+        new PlayRoundRequest(p1Throw, p2Throw, new Proxy(ui, {
+            get: function(targetUI, result){
                 roundRepo.save(new Round(p1Throw, p2Throw, result))
-                ui[result]()
+                return targetUI[result]
             }
-        }
+        })).process()
     }
 
     this.getHistory = function(ui){
